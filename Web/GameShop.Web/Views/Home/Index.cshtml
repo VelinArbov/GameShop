@@ -1,9 +1,139 @@
-﻿@using GameShop.Common
-@{
-    this.ViewData["Title"] = "Home Page";
+﻿@using Microsoft.CodeAnalysis.CSharp.Syntax
+@using GameShop.Common
+@model GameShop.Web.ViewModels.Game.AllGamesViewModel
+
+
+@if (this.TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @this.TempData["ErrorMessage"]
+    </div>
+}
+@if (this.TempData["InfoMessage"] != null)
+{
+    <div class="alert alert-success">
+        @this.TempData["InfoMessage"]
+    </div>
+}
+<h1 align="center" style="font-kerning: auto">JobsPage</h1>
+
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by key: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
+            <input type="submit" value="Search" type="button" class="btn btn-primary" /> |
+            <a asp-action="Index" type="button" class="btn btn-warning">Full List</a>
+            @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+            {
+                <a asp-area="Administration" asp-controller="Dashboard" asp-action="CreateGame" type="button" class="btn btn-outline-danger">Creat Game</a>
+
+            }
+        </p>
+    </div>
+</form>
+
+<span></span>
+@if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+{
+    <div>
+
+        <table class="table table-hover table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">RealaseDate</th>
+                    <th scope="col">Desc</th>
+                    <th scope="col">Price Level</th>
+
+                </tr>
+            </thead>
+            @foreach (var game in Model.Games)
+            {
+                <tbody>
+                    <tr>
+                        <th scope="row"></th>
+                        <td><img src="@game.ImageURL" width="80" class="mr-3" alt="Avatar"></td>
+                        <td>@game.Title</td>
+                        <td>@game.RealaseDate</td>
+                        <td>@game.ShortDesc</td>
+                        <td>@game.Price $</td>
+                        <td>
+                            <a class="btn btn-primary" asp-area="Administration" asp-controller="Dashboard" asp-action="" asp-route-id="@game.Id">Edit</a>
+                            <a class="btn btn-danger" asp-area="Administration" asp-controller="Dashboard" asp-action="" asp-route-id="@game.Id">Delete</a>
+                            <a class="btn btn-primary" asp-controller="Game" asp-action="Details" asp-route-id="@game.Id" *@>Details</a>
+
+                        </td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+    </div>
+}
+else
+{
+    <div>
+
+        <table class="table table-hover table-dark">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">RealaseDate</th>
+                    <th scope="col">Desc</th>
+                    <th scope="col">Price Level</th>
+                </tr>
+            </thead>
+            @foreach (var game in Model.Games)
+            {
+                <tbody>
+                    <tr>
+                        <th scope="row"></th>
+                        <td><img src="@game.ImageURL" width="80" height="80" class="mr-3" alt="Avatar"></td>
+                        <td>@game.Title</td>
+                        <td>@game.RealaseDate</td>
+                        <td>@game.ShortDesc</td>
+                        <td>@game.Price $</td>
+                        <td>
+                            <a class="btn btn-primary" asp-controller="Game" asp-action="Details" asp-route-id="@game.Id" *@>Details</a>
+                        </td>
+
+                    </tr>
+                </tbody>
+            }
+        </table>
+    </div>
+
+
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+
+<script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
+<script>
+    $(".btn-danger").click(function (e) {
+        if (confirm("Are you sure?")) {
+            alert('OK');
+        }
+        else {
+            e.preventDefault();
+        }
+    });
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    $('th').click(function () {
+        var table = $(this).parents('table').eq(0)
+        var rows = table.find('tr:gt(0)').toArray().sort(comparer($(this).index()))
+        this.asc = !this.asc
+        if (!this.asc) { rows = rows.reverse() }
+        for (var i = 0; i < rows.length; i++) { table.append(rows[i]) }
+    })
+    function comparer(index) {
+        return function (a, b) {
+            var valA = getCellValue(a, index), valB = getCellValue(b, index)
+            return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.toString().localeCompare(valB)
+        }
+    }
+    function getCellValue(row, index) { return $(row).children('td').eq(index).text() }
+</script>

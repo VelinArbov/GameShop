@@ -1,0 +1,47 @@
+﻿@using System.Security.Claims
+@using GameShop.Common
+@using GameShop.Services.Data
+@model GameShop.Web.ViewModels.Game.GameViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1 align="center">Details</h1>
+
+<!-- Page Content -->
+<div class="container">
+
+    <!-- Portfolio Item Heading -->
+    <h1 class="my-4">
+        @Model.Title 
+    </h1>
+
+    <!-- Portfolio Item Row -->
+    <div class="row">
+
+        <div class="col-md-8">
+            <img class="img-fluid" src="@Model.ImageURL" alt="">
+        </div>
+
+        <div class="col-md-4">
+            <h3 class="my-3">Description</h3>
+            <p>@Model.Description</p>
+            <h3 class="my-3"> Details</h3>
+            <ul>
+                <li>RealaseDate: @Model.RealaseDate</li>
+                <li>Price: @Model.Price</li>
+            </ul>
+        </div>
+
+    </div>
+    <!-- /.row -->
+
+
+
+        <a class="btn btn-danger float-right" @*a@*sp-area="Student" asp-controller="Dashboard" asp-action="ApplyJob" asp-route-id="@Model.Id"*@>Buy</a>
+    
+
+    <a class="btn btn-primary " asp-controller="home" asp-action="Index">Back to List</a>
+</div>
+

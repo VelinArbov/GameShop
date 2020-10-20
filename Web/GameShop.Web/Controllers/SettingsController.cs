@@ -12,21 +12,19 @@
 
     public class SettingsController : BaseController
     {
-        private readonly ISettingsService settingsService;
-
         private readonly IDeletableEntityRepository<Setting> repository;
 
-        public SettingsController(ISettingsService settingsService, IDeletableEntityRepository<Setting> repository)
+        public SettingsController(IDeletableEntityRepository<Setting> repository)
         {
-            this.settingsService = settingsService;
+            
             this.repository = repository;
         }
 
         public IActionResult Index()
         {
-            var settings = this.settingsService.GetAll<SettingViewModel>();
-            var model = new SettingsListViewModel { Settings = settings };
-            return this.View(model);
+            
+          
+            return this.View();
         }
 
         public async Task<IActionResult> InsertSetting()

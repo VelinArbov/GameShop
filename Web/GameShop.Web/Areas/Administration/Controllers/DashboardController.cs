@@ -2,22 +2,37 @@
 {
     using GameShop.Services.Data;
     using GameShop.Web.ViewModels.Administration.Dashboard;
-
+    using GameShop.Web.ViewModels.Game;
     using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
 
     public class DashboardController : AdministrationController
     {
-        private readonly ISettingsService settingsService;
+      
+        private readonly IGameService gameService;
 
-        public DashboardController(ISettingsService settingsService)
+        public DashboardController(IGameService gameService)
         {
-            this.settingsService = settingsService;
+            this.gameService = gameService;
         }
 
         public IActionResult Index()
         {
-            var viewModel = new IndexViewModel { SettingsCount = this.settingsService.GetCount(), };
-            return this.View(viewModel);
+            return this.View();
         }
+
+        public IActionResult CreateGame()
+        {
+            return this.View("Game/CreateGame");
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> CreateCategory(GameViewModel model)
+        {
+            await this.gameService.CreateAsync(model.Title, model.Description, model.ImageURL, model.Price);       
+            return this.RedirectToAction("Index");
+        }
+
+
     }
 }
