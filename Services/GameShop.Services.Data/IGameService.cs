@@ -13,5 +13,8 @@
 
         Task<int> CreateAsync(string title, string description, string imageUrl, decimal price);
 
+        Task EditAsync(string id, string title, string description, string imageUrl, decimal price);
+
+        Task DeleteAsync(string id);
     }
 }

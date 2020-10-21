@@ -25,7 +25,8 @@
             <a asp-action="Index" type="button" class="btn btn-warning">Full List</a>
             @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
-                <a asp-area="Administration" asp-controller="Dashboard" asp-action="CreateGame" type="button" class="btn btn-outline-danger">Creat Game</a>
+                <a asp-area="Administration" asp-controller="Dashboard" asp-action="CreateGame" type="button" class="btn btn-outline-danger">Create</a>
+               
 
             }
         </p>
@@ -59,9 +60,9 @@
                         <td>@game.ShortDesc</td>
                         <td>@game.Price $</td>
                         <td>
-                            <a class="btn btn-primary" asp-area="Administration" asp-controller="Dashboard" asp-action="" asp-route-id="@game.Id">Edit</a>
-                            <a class="btn btn-danger" asp-area="Administration" asp-controller="Dashboard" asp-action="" asp-route-id="@game.Id">Delete</a>
                             <a class="btn btn-primary" asp-controller="Game" asp-action="Details" asp-route-id="@game.Id" *@>Details</a>
+                            <a class="btn btn-primary" asp-area="Administration" asp-controller="Dashboard" asp-action="EditGame" asp-route-id="@game.Id">Edit</a>
+                            <a class="btn btn-danger" asp-area="Administration" asp-controller="Dashboard" asp-action="Delete" asp-route-id="@game.Id">Delete</a>
 
                         </td>
                     </tr>
