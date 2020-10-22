@@ -11,7 +11,7 @@
 
         T GetJobById<T>(string id);
 
-        Task<int> CreateAsync(string title, string description, string imageUrl, decimal price);
+        Task<int> CreateAsync(string title, string description, string imageUrl, decimal price, DateTime realaseDate);
 
         Task EditAsync(string id, string title, string description, string imageUrl, decimal price);
 

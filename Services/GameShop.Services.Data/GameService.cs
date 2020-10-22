@@ -8,6 +8,7 @@
     using GameShop.Data.Common.Repositories;
     using GameShop.Data.Models;
     using GameShop.Services.Mapping;
+    using Microsoft.EntityFrameworkCore.Storage;
 
     public class GameService : IGameService
     {
@@ -18,7 +19,7 @@
             this.repository = repository;
         }
 
-        public async Task<int> CreateAsync(string title, string description, string imageUrl, decimal price)
+        public async Task<int> CreateAsync(string title, string description, string imageUrl, decimal price, DateTime realaseDate)
         {
             var category = this.repository.AddAsync(new Game
             {
@@ -26,7 +27,8 @@
                 Description = description,
                 ImageURL = imageUrl ?? "https://arbikas.com/pub/media/brands/asi.jpg",
                 Price = price,
-            });
+                RealaseDate = realaseDate,
+            }) ;
 
             var result = await this.repository.SaveChangesAsync();
             return result;

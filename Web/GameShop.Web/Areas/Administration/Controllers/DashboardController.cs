@@ -29,7 +29,7 @@
         [HttpPost]
         public async Task<ActionResult> CreateGame(GameViewModel model)
         {
-            await this.gameService.CreateAsync(model.Title, model.Description, model.ImageURL, model.Price);
+            await this.gameService.CreateAsync(model.Title, model.Description, model.ImageURL, model.Price, model.RealaseDate);
             return this.RedirectToAction("Index");
         }
 
@@ -48,7 +48,7 @@
         public async Task<ActionResult> Delete(string id)
         {
             await this.gameService.DeleteAsync(id);
-            return this.Redirect("Index");
+            return this.RedirectToAction("Index");
         }
     }
 }

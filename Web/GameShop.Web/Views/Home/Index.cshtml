@@ -15,18 +15,16 @@
         @this.TempData["InfoMessage"]
     </div>
 }
-<h1 align="center" style="font-kerning: auto">JobsPage</h1>
+<h1 align="center" style="font-kerning: auto; color:red ">Games</h1>
 
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
-            Find by key: <input type="text" name="SearchString" value="@ViewData["currentFilter"]" />
-            <input type="submit" value="Search" type="button" class="btn btn-primary" /> |
-            <a asp-action="Index" type="button" class="btn btn-warning">Full List</a>
+          
             @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
-                <a asp-area="Administration" asp-controller="Dashboard" asp-action="CreateGame" type="button" class="btn btn-outline-danger">Create</a>
-               
+                <a asp-area="Administration" asp-controller="Dashboard" asp-action="CreateGame" type="button" class="btn btn-outline-danger">CreateGame</a>
+
 
             }
         </p>
@@ -56,7 +54,7 @@
                         <th scope="row"></th>
                         <td><img src="@game.ImageURL" width="80" class="mr-3" alt="Avatar"></td>
                         <td>@game.Title</td>
-                        <td>@game.RealaseDate</td>
+                        <td>@game.ShortDate</td>
                         <td>@game.ShortDesc</td>
                         <td>@game.Price $</td>
                         <td>
@@ -78,6 +76,7 @@ else
         <table class="table table-hover table-dark">
             <thead>
                 <tr>
+
                     <th scope="col">#</th>
                     <th scope="col">Image</th>
                     <th scope="col">Title</th>
@@ -93,7 +92,7 @@ else
                         <th scope="row"></th>
                         <td><img src="@game.ImageURL" width="80" height="80" class="mr-3" alt="Avatar"></td>
                         <td>@game.Title</td>
-                        <td>@game.RealaseDate</td>
+                        <td>@game.ShortDate</td>
                         <td>@game.ShortDesc</td>
                         <td>@game.Price $</td>
                         <td>
@@ -105,6 +104,8 @@ else
             }
         </table>
     </div>
+
+
 
 
 }

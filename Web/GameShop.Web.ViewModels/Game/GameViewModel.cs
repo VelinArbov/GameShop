@@ -20,5 +20,7 @@
         public string Description { get; set; }
 
         public DateTime RealaseDate { get; set; }
+
+        public string ShortDate => this.RealaseDate.ToString("d");
     }
 }
