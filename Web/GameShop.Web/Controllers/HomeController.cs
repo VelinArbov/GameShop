@@ -2,14 +2,18 @@
 {
     using System.Diagnostics;
     using System.Linq;
+
     using GameShop.Services.Data;
     using GameShop.Web.ViewModels;
     using GameShop.Web.ViewModels.Game;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
 
     public class HomeController : BaseController
     {
         private readonly IGameService gameService;
+      
 
         public HomeController(IGameService gameService)
         {
@@ -18,6 +22,7 @@
 
         public IActionResult Index(int page = 1, string searchString = null)
         {
+            
             this.ViewData["CurrentFilter"] = searchString;
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -28,6 +33,7 @@
                 };
                 return this.View(viewModel);
             }
+
             var view = new AllGamesViewModel
             {
                 Games = this.gameService.GetAll<GameViewModel>(),
@@ -47,5 +53,9 @@
             return this.View(
                 new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
+
+
+
+
     }
 }

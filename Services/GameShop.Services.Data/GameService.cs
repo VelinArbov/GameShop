@@ -13,11 +13,53 @@
     public class GameService : IGameService
     {
         private readonly IDeletableEntityRepository<Game> repository;
+        private readonly IDeletableEntityRepository<ApplicationUser> userRepository;
+        private readonly IRepository<UserGames> userGamesRepository;
 
-        public GameService(IDeletableEntityRepository<Game> repository)
+        public GameService(
+            IDeletableEntityRepository<Game> repository,
+            IDeletableEntityRepository<ApplicationUser> userRepository,
+            IRepository<UserGames> userGamesRepository)
         {
             this.repository = repository;
+            this.userRepository = userRepository;
+            this.userGamesRepository = userGamesRepository;
         }
+
+        public async Task BuyGame(string gameId, string userId)
+        {
+            var user = this.userRepository.All()
+                .FirstOrDefault(x => x.Id == userId);
+            var game = this.GetJobById<Game>(gameId);
+            if (user == null || game == null)
+            {
+                throw new Exception("Please Login in.");
+            }
+
+            var exist = this.userGamesRepository.All().FirstOrDefault(x => x.GameId == gameId && x.ApplicationUserId == userId);
+            if (exist == null)
+            {
+                var userGames = new UserGames
+                {
+                    ApplicationUserId = userId,
+                    ApplicationUser = user,
+                    Game = game,
+                    GameId = gameId,
+                };
+
+                game.Users.Add(userGames);
+                user.Games.Add(userGames);
+                await this.repository.SaveChangesAsync();
+                await this.userRepository.SaveChangesAsync();
+
+            }
+            else
+            {
+                throw new Exception(" Invalid operation");
+            }
+        }
+
+
 
         public async Task<int> CreateAsync(string title, string description, string imageUrl, decimal price, DateTime realaseDate)
         {
@@ -28,7 +70,7 @@
                 ImageURL = imageUrl ?? "https://arbikas.com/pub/media/brands/asi.jpg",
                 Price = price,
                 RealaseDate = realaseDate,
-            }) ;
+            });
 
             var result = await this.repository.SaveChangesAsync();
             return result;

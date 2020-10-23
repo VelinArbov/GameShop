@@ -24,11 +24,13 @@
         {
         }
 
-        public DbSet<Setting> Settings { get; set; }
+       
 
         public DbSet<Game> Games { get; set; }
 
         public DbSet<UserGames> UserGames { get; set; }
+
+        public DbSet<CartItem> ShoppingCartItems { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
