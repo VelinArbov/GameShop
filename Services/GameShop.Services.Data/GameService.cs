@@ -30,7 +30,7 @@
         {
             var user = this.userRepository.All()
                 .FirstOrDefault(x => x.Id == userId);
-            var game = this.GetJobById<Game>(gameId);
+            var game = this.GetGameById(gameId);
             if (user == null || game == null)
             {
                 throw new Exception("Please Login in.");
@@ -133,6 +133,14 @@
             }
 
             return query.To<T>().ToList();
+        }
+
+        public Game GetGameById(string id)
+        {
+            var game = this.repository.All().Where(x => x.Id == id)
+             .FirstOrDefault();
+
+            return game;
         }
 
         public T GetJobById<T>(string id)

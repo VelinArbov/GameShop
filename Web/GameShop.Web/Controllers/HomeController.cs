@@ -34,6 +34,7 @@
                 return this.View(viewModel);
             }
 
+            this.ViewBag.Id = this.HttpContext.Session.Id;
             var view = new AllGamesViewModel
             {
                 Games = this.gameService.GetAll<GameViewModel>(),

@@ -1,5 +1,6 @@
 ﻿namespace GameShop.Services.Data
 {
+    using GameShop.Data.Models;
     using System;
     using System.Collections.Generic;
     using System.Text;
@@ -10,6 +11,7 @@
         IEnumerable<T> GetAll<T>(int? take = null, int skip = 0);
 
         T GetJobById<T>(string id);
+        Game GetGameById(string id);
 
         Task<int> CreateAsync(string title, string description, string imageUrl, decimal price, DateTime realaseDate);
 

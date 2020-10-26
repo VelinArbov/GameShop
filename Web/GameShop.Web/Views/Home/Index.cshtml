@@ -16,11 +16,12 @@
     </div>
 }
 <h1 align="center" style="font-kerning: auto; color:red ">Games</h1>
+<h1 align="center" style="font-kerning: auto; color:red ">@ViewBag.Id</h1>
 
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
-          
+
             @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
             {
                 <a asp-area="Administration" asp-controller="Dashboard" asp-action="CreateGame" type="button" class="btn btn-outline-danger">CreateGame</a>
