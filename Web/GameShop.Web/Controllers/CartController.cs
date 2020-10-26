@@ -3,51 +3,32 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Claims;
     using System.Threading.Tasks;
+
     using GameShop.Data.Models;
     using GameShop.Services.Data;
     using GameShop.Web.Helpers;
     using GameShop.Web.ViewModels.Game;
     using Microsoft.AspNetCore.Mvc;
 
-    public class GameController : BaseController
+    public class CartController : BaseController
     {
         private readonly IGameService gameService;
 
-        public GameController(IGameService gameService)
+        public CartController(IGameService gameService)
         {
             this.gameService = gameService;
         }
 
-        public IActionResult Details(string id)
+        public IActionResult Index()
         {
-
-
-
-            var viewModel = this.gameService.GetJobById<GameViewModel>(id);
-
-            return this.View(viewModel);
+            var cart = SessionHelper.GetObjectFromJson<List<CartItem>>(this.HttpContext.Session, "cart");
+            this.ViewBag.cart = cart;
+            this.ViewBag.total = cart.Sum(item => item.Game.Price * item.Quantity);
+            return this.View();
         }
 
-        //public IActionResult BuyGame(string id)
-        //{
-        //    try
-        //    {
-        //        var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //        this.gameService.BuyGame(id, userId);
-        //        this.TempData["InfoMessage"] = "Добавихте успешно тази игра ";
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        this.TempData["ErrorMessage"] = e.Message;
-        //        this.TempData["InfoMessage"] = null;
-        //    }
-
-        //    return this.Redirect("/Home/Index");
-
-        //}
-
+        [Route("buy/{id}")]
         public IActionResult Buy(string id)
         {
             var game = this.gameService.GetGameById(id);
@@ -72,7 +53,17 @@
                 }
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             }
-            return this.Redirect("/Home/Index");
+            return RedirectToAction("Index");
+        }
+
+        [Route("remove/{id}")]
+        public IActionResult Remove(string id)
+        {
+            List<CartItem> cart = SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "cart");
+            int index = isExist(id);
+            cart.RemoveAt(index);
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            return RedirectToAction("Index");
         }
 
         private int isExist(string id)
@@ -87,5 +78,6 @@
             }
             return -1;
         }
+
     }
 }

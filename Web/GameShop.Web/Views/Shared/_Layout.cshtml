@@ -19,8 +19,13 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">Jobs</a>
+                        </li>
+                    </ul>
                     <form class="form-inline">
-                        <a asp-action="Index" type="button "  class="btn btn-warning">Full List </a>
+                        <a asp-action="Index" type="button " class="btn btn-warning">Full List </a>
                         <input class="form-control mr-sm-2" name="SearchString" type="search" value="@ViewData["currentFilter"]" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                     </form>

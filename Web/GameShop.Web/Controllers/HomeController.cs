@@ -34,6 +34,8 @@
                 return this.View(viewModel);
             }
 
+           
+
             this.ViewBag.Id = this.HttpContext.Session.Id;
             var view = new AllGamesViewModel
             {
@@ -42,6 +44,8 @@
 
             return this.View(view);
         }
+
+
 
         public IActionResult Privacy()
         {
