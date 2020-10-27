@@ -13,7 +13,6 @@
     public class HomeController : BaseController
     {
         private readonly IGameService gameService;
-      
 
         public HomeController(IGameService gameService)
         {
@@ -22,7 +21,6 @@
 
         public IActionResult Index(int page = 1, string searchString = null)
         {
-            
             this.ViewData["CurrentFilter"] = searchString;
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -34,9 +32,6 @@
                 return this.View(viewModel);
             }
 
-           
-
-            this.ViewBag.Id = this.HttpContext.Session.Id;
             var view = new AllGamesViewModel
             {
                 Games = this.gameService.GetAll<GameViewModel>(),
@@ -44,8 +39,6 @@
 
             return this.View(view);
         }
-
-
 
         public IActionResult Privacy()
         {
@@ -58,9 +51,5 @@
             return this.View(
                 new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
         }
-
-
-
-
     }
 }

@@ -1,51 +1,164 @@
-﻿<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
-<body>
+﻿<!--Section: Block Content-->
 
-    <h3>Cart Page</h3>
-    <table class="table table-hover table-dark">
-        <tr>
+<section>
 
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Title</th>
-                <th scope="col">Photo</th>
-                <th scope="col">Price</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Sub Total</th>
+    <!--Grid row-->
+    <div class="row">
 
-            </tr>
-        </thead>
-        </tr>
-        @foreach (var game in ViewBag.cart)
-        {
-            <tr>
-                <th scope="row"></th>
-                <td><img src="@game.ImageURL" width="80" height="80" class="mr-3" alt="Avatar"></td>
-                <td>@game.Title</td>
-                <td>@game.ShortDate</td>
-                <td>@game.ShortDesc</td>
-                <td>@game.Price $</td>
-                <td>
-                    <a class="btn btn-primary" asp-controller="Game" asp-action="Details" asp-route-id="@game.Id" *@>Details</a>
-                </td>
+        <!--Grid column-->
+        <div class="col-lg-8">
 
-            </tr>
-        }
-        <tr>
-            <td align="right" colspan="6">Sum</td>
-            <td>
-                @ViewBag.total
-            </td>
-        </tr>
-    </table>
-    <br>
-    <a asp-controller="Home" asp-action="Index">Continue Shopping</a>
+            <!-- Card -->
+            <div class="mb-3">
+                <div class="pt-4 wish-list">
 
-</body>
-</html>
+                    <h5 class="mb-4">Cart (<span>@ViewBag.Count</span> items)</h5>
 
+                    @foreach (var item in ViewBag.cart)
+                    {
+
+
+                        <div class="row mb-4">
+                            <div class="col-md-5 col-lg-3 col-xl-3">
+                                <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+                                    <img class="img-fluid w-100"
+                                         src="@item.Game.ImageURL" alt="Sample">
+                                    <a href="#!">
+
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-7 col-lg-9 col-xl-9">
+                                <div>
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h5>@item.Game.Title</h5>
+                                            <p class="mb-3 text-muted text-uppercase small">Price - @item.Game.Price</p>
+                                            <p class="mb-2 text-muted text-uppercase small">RealeaseDate: @((item.Game.RealaseDate).Year)</p>
+                                            <p class="mb-2 text-muted text-uppercase small">Quantity: @item.Quantity</p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <a class="btn btn-danger" asp-controller="Cart" asp-action="Remove" asp-route-id="@item.Game.Id">
+                                                <i class="fas fa-trash-alt mr-1"></i> Remove item
+                                            </a>
+                                            <a href="#!" type="button" class="card-link-secondary small text-uppercase">
+                                                <i class="fas fa-heart mr-1"></i> Move to wish list
+                                            </a>
+                                        </div>
+                                        <p class="mb-0"><span><strong id="summary">@(item.Game.Price)</strong></span></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr class="mb-4">
+                    }
+
+                    <p class="text-primary mb-0">
+                        <i class="fas fa-info-circle mr-1"></i> Do not delay the purchase, adding
+                        items to your cart does not mean booking them.
+                    </p>
+
+                </div>
+            </div>
+            <!-- Card -->
+            <!-- Card -->
+            <div class="mb-3">
+                <div class="pt-4">
+
+                    <h5 class="mb-4">Expected shipping delivery</h5>
+
+                    <p class="mb-0"> @DateTime.UtcNow.AddDays(3)</p>
+                </div>
+            </div>
+            <!-- Card -->
+            <!-- Card -->
+            <div class="mb-3">
+                <div class="pt-4">
+
+                    <h5 class="mb-4">We accept</h5>
+
+                    <img class="mr-2" width="45px"
+                         src="https://mdbootstrap.com/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
+                         alt="Visa">
+                    <img class="mr-2" width="45px"
+                         src="https://mdbootstrap.com/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
+                         alt="American Express">
+                    <img class="mr-2" width="45px"
+                         src="https://mdbootstrap.com/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
+                         alt="Mastercard">
+                    <img class="mr-2" width="45px"
+                         src="https://mdbootstrap.com/wp-content/plugins/woocommerce/includes/gateways/paypal/assets/images/paypal.png"
+                         alt="PayPal acceptance mark">
+                </div>
+            </div>
+            <!-- Card -->
+
+        </div>
+        <!--Grid column-->
+        <!--Grid column-->
+        <div class="col-lg-4">
+
+            <!-- Card -->
+            <div class="mb-3">
+                <div class="pt-4">
+
+                    <h5 class="mb-3">The total amount of</h5>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+
+                            Temporary amount
+                            <span>$@Math.Round(ViewBag.TotalWithoutVAT,2)</span>
+                        
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            Shipping
+                            <span>Gratis</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                            <div>
+                                <strong>The total amount of</strong>
+                                <strong>
+                                    <p class="mb-0">(including VAT)</p>
+                                </strong>
+                            </div><strong>$@Math.Round(ViewBag.total, 2)</strong>
+                        </li>
+                    </ul>
+
+                    <button type="button" class="btn btn-primary btn-block">go to checkout</button>
+
+                </div>
+            </div>
+            <!-- Card -->
+            <!-- Card -->
+            <div class="mb-3">
+                <div class="pt-4">
+
+                    <a class="dark-grey-text d-flex justify-content-between" data-toggle="collapse" href="#collapseExample"
+                       aria-expanded="false" aria-controls="collapseExample">
+                        Add a discount code (optional)
+                        <span><i class="fas fa-chevron-down pt-1"></i></span>
+                    </a>
+
+                    <div class="collapse" id="collapseExample">
+                        <div class="mt-3">
+                            <div class="md-form md-outline mb-0">
+                                <input type="text" id="discount-code" class="form-control font-weight-light"
+                                       placeholder="Enter discount code">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Card -->
+
+        </div>
+        <!--Grid column-->
+
+    </div>
+    <!-- Grid row -->
+
+</section>
+<!--Section: Block Content-->
