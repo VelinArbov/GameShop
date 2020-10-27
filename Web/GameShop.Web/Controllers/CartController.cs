@@ -22,13 +22,25 @@
 
         public IActionResult Index()
         {
-            var cart = SessionHelper.GetObjectFromJson<List<CartItem>>(this.HttpContext.Session, "cart");
-            this.ViewBag.cart = cart;
-            this.ViewBag.Count = cart.Count();
-            this.ViewBag.quantity = cart.Select(item => item.Quantity);
-            this.ViewBag.total = cart.Sum(item => item.Game.Price * item.Quantity);
-            this.ViewBag.TotalWithoutVAT = (cart.Sum(item => item.Game.Price * item.Quantity)) * 0.8M;
-            return this.View();
+            try
+            {
+
+                var cart = SessionHelper.GetObjectFromJson<List<CartItem>>(this.HttpContext.Session, "cart");
+                this.ViewBag.cart = cart;
+                this.ViewBag.Count = cart.Count();
+                this.ViewBag.quantity = cart.Select(item => item.Quantity);
+                this.ViewBag.total = cart.Sum(item => item.Game.Price * item.Quantity);
+                this.ViewBag.TotalWithoutVAT = cart.Sum(item => item.Game.Price * item.Quantity) * 0.8M;
+                this.TempData["InfoMessage"] = "Добавихте успешно тази игра ";
+                return this.View();
+            }
+            catch
+            {
+                this.TempData["ErrorMessage"] = "Shopping cart is empty";
+                this.TempData["InfoMessage"] = null;
+                return this.Redirect("/Home/Index");
+
+            }
         }
 
         [Route("buy/{id}")]
@@ -36,16 +48,17 @@
         {
             var game = this.gameService.GetGameById(id);
             var gameModel = new GameViewModel();
-            if (SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "cart") == null)
+            Microsoft.AspNetCore.Http.HttpContext httpContext = this.HttpContext;
+            if (SessionHelper.GetObjectFromJson<List<CartItem>>(httpContext.Session, "cart") == null)
             {
                 List<CartItem> cart = new List<CartItem>();
                 cart.Add(new CartItem { Game = game, Quantity = 1 });
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+                SessionHelper.SetObjectAsJson(this.HttpContext.Session, "cart", cart);
             }
             else
             {
-                List<CartItem> cart = SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "cart");
-                int index = isExist(id);
+                List<CartItem> cart = SessionHelper.GetObjectFromJson<List<CartItem>>(httpContext.Session, "cart");
+                int index = this.isExist(id);
                 if (index != -1)
                 {
                     cart[index].Quantity++;
@@ -54,24 +67,28 @@
                 {
                     cart.Add(new CartItem { Game = game, Quantity = 1 });
                 }
-                SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+
+                SessionHelper.SetObjectAsJson(httpContext.Session, "cart", cart);
             }
-            return RedirectToAction("Index");
+
+            return this.RedirectToAction("Index");
         }
 
         [Route("remove/{id}")]
         public IActionResult Remove(string id)
         {
-            List<CartItem> cart = SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "cart");
-            int index = isExist(id);
+            Microsoft.AspNetCore.Http.HttpContext httpContext = this.HttpContext;
+            List<CartItem> cart = SessionHelper.GetObjectFromJson<List<CartItem>>(httpContext.Session, "cart");
+            int index = this.isExist(id);
             cart.RemoveAt(index);
-            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
-            return RedirectToAction("Index");
+            SessionHelper.SetObjectAsJson(this.HttpContext.Session, "cart", cart);
+            return this.RedirectToAction("Index");
         }
 
         private int isExist(string id)
         {
-            List<CartItem> cart = SessionHelper.GetObjectFromJson<List<CartItem>>(HttpContext.Session, "cart");
+            Microsoft.AspNetCore.Http.HttpContext httpContext = this.HttpContext;
+            List<CartItem> cart = SessionHelper.GetObjectFromJson<List<CartItem>>(httpContext.Session, "cart");
             for (int i = 0; i < cart.Count; i++)
             {
                 if (cart[i].Game.Id.Equals(id))
@@ -79,6 +96,7 @@
                     return i;
                 }
             }
+
             return -1;
         }
 
