@@ -23,30 +23,52 @@
         public IActionResult Details(string id)
         {
 
-
-
             var viewModel = this.gameService.GetJobById<GameViewModel>(id);
 
             return this.View(viewModel);
         }
 
-        //public IActionResult BuyGame(string id)
-        //{
-        //    try
-        //    {
-        //        var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //        this.gameService.BuyGame(id, userId);
-        //        this.TempData["InfoMessage"] = "Добавихте успешно тази игра ";
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        this.TempData["ErrorMessage"] = e.Message;
-        //        this.TempData["InfoMessage"] = null;
-        //    }
+        public IActionResult BuyGame(string id)
+        {
+            try
+            {
+                var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                this.gameService.BuyGame(id, userId);
+                this.TempData["InfoMessage"] = "Успешна покупка";
+            }
+            catch (Exception e)
+            {
+                this.TempData["ErrorMessage"] = e.Message;
+                this.TempData["InfoMessage"] = null;
+            }
 
-        //    return this.Redirect("/Home/Index");
+            return this.Redirect("/Home/Index");
 
-        //}
+        }
+
+        public IActionResult BuyGames()
+        {
+            var cart = SessionHelper.GetObjectFromJson<List<CartItem>>(this.HttpContext.Session, "cart");
+            foreach (var game in cart)
+            {
+                try
+                {
+                    var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    this.gameService.BuyGame(game.Game.Id, userId);
+                }
+                catch (Exception e)
+                {
+                    this.TempData["ErrorMessage"] = e.Message;
+                    this.TempData["InfoMessage"] = null;
+                }
+
+            }
+
+            this.HttpContext.Session.Clear();
+
+            return this.Redirect("/Home/Index");
+
+        }
 
         public IActionResult Buy(string id)
         {

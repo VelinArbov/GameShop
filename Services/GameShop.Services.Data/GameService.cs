@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Security.Cryptography.X509Certificates;
     using System.Threading.Tasks;
 
     using GameShop.Data.Common.Repositories;
@@ -141,6 +142,23 @@
              .FirstOrDefault();
 
             return game;
+        }
+
+        public IEnumerable<Game> GetGamesById(List<string> ids)
+        {
+           
+            var games = new List<Game>();
+            foreach (var id in ids)
+            {
+                var game = this.repository.All().FirstOrDefault(x => x.Id == id);
+
+                if (game != null)
+                {
+                    games.Add(game);
+                }
+            }
+
+            return games;
         }
 
         public T GetJobById<T>(string id)

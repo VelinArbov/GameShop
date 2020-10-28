@@ -30,7 +30,8 @@
                 this.ViewBag.Count = cart.Count();
                 this.ViewBag.quantity = cart.Select(item => item.Quantity);
                 this.ViewBag.total = cart.Sum(item => item.Game.Price * item.Quantity);
-                this.ViewBag.TotalWithoutVAT = cart.Sum(item => item.Game.Price * item.Quantity) * 0.8M;               
+                this.ViewBag.TotalWithoutVAT = cart.Sum(item => item.Game.Price * item.Quantity) * 0.8M;
+                this.ViewBag.GameIds = cart.Select(x => x.GameId);
                 return this.View();
             }
             catch

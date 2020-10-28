@@ -11,6 +11,7 @@
         IEnumerable<T> GetAll<T>(int? take = null, int skip = 0);
 
         T GetJobById<T>(string id);
+
         Game GetGameById(string id);
 
         Task<int> CreateAsync(string title, string description, string imageUrl, decimal price, DateTime realaseDate);
@@ -20,5 +21,8 @@
         Task DeleteAsync(string id);
 
         Task BuyGame(string gameId, string userId);
+
+        IEnumerable<Game> GetGamesById(List<string> ids);
+
     }
 }

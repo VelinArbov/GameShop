@@ -129,12 +129,13 @@
                     @if (this.User.Identity.IsAuthenticated)
                     {
 
-                        <button type="button" class="btn btn-primary btn-block">go to checkout</button>
+                        <a  asp-controller="Game" asp-action="BuyGames" class="btn btn-primary btn-block" title="Трябва да си регистриран за да продължиш">Check out</a>
+
                     }
                     else
                     {
                         <a asp-area="Identity" asp-controller="Account" asp-action="Login" class="btn btn-primary btn-block" title="Трябва да си регистриран за да продължиш">Go to check out</a>
-                        
+
                     }
 
                 </div>
