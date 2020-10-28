@@ -8,6 +8,7 @@
     using GameShop.Web.ViewModels.Game;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Newtonsoft.Json;
 
     public class HomeController : BaseController
@@ -29,7 +30,14 @@
                     Games = this.gameService.GetAll<GameViewModel>().Where(x
                         => x.Title.ToLower().Contains(searchString.ToLower()) || x.Title.ToLower().Contains(searchString.ToLower())),
                 };
-                return this.View(viewModel);
+                if (viewModel.Games.Any())
+                {
+                    return this.View(viewModel);
+
+                }
+
+                this.TempData["ErrorMessage"] = "Error";
+                this.TempData["InfoMessage"] = null;
             }
 
             var view = new AllGamesViewModel

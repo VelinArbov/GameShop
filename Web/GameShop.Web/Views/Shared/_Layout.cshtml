@@ -28,10 +28,16 @@
                         </li>
                     </ul>
                     <form class="form-inline">
-                        <a asp-action="Index" type="button " class="btn btn-warning">Full List </a>
+
                         <input class="form-control mr-sm-2" name="SearchString" type="search" value="@ViewData["currentFilter"]" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                     </form>
+                    @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <a asp-area="Administration" asp-controller="Dashboard" asp-action="CreateGame" type="button" class="btn btn-success" title="Create game" >
+                            <i class="fas fa-plus-square"></i>
+                        </a>
+                    }
                 </div>
             </div>
         </nav>
